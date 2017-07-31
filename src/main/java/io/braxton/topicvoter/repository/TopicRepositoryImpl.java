@@ -15,12 +15,22 @@ import java.util.List;
 public class TopicRepositoryImpl implements TopicRepository {
 
     @Autowired
-    JdbcTemplate jdcbTemplate;
+    JdbcTemplate jdbcTemplate;
 
 
 
     public List<Topic> findAll() {
-        return jdcbTemplate.query("SELECT * FROM topic", new TopicMapper());
+        return jdbcTemplate.query("SELECT * FROM topic", new TopicMapper());
+    }
+
+    @Override
+    public void add(String title, String description) {
+        jdbcTemplate.update("INSERT INTO topic (title, description) VALUES(?,?)", title, description);
+    }
+
+    @Override
+    public void delete(long id) {
+        jdbcTemplate.update("DELETE FROM topic WHERE id = ?", id);
     }
 
     private static class TopicMapper implements RowMapper<Topic>{
